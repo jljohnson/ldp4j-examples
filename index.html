@@ -1,6 +1,119 @@
 <html>
-    <head>LDP4j examples</head>
-    <body>
-        <p>Test page</p>
+    <head>
+        <title>LDP4j examples</title>
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=java&skin=sunburst"></script>
+    </head>
+    <body onload="prettyPrint()">
+        <h1>Building read-write Linked Data applications with LDP4j</h1>
+        <p>This project contains two simple LDP4j applications that demonstrate the basics of building read-write Linked Data applications using LDP4j.</p>
+        <ul>
+            <li>
+                <h3>FOAF Profiles App that shows</h3> 
+                <ul>
+                    <li>how to publish domain entities as Linked Data resources using LDP4j</li>
+                    <li>how to make those resources modifiable</li>
+                </ul>
+            </li>
+            <li>
+                <h3>Contact List App that shows</h3>
+                <ul>
+                    <li>how to create new resources and the usage of three different kinds of LDP containers</li>
+                    <li>how to make resources deletable</li>
+                </ul>
+            </li>
+        </ul>
+        <p>The applications implement the examples from the slides <a href="http://www.slideshare.net/nandana/learning-w3c-linked-data-platform-with-examples">Learning W3C Linked Data Platform 1.0</a>.</p>
+        
+        <h3>FOAF Profiles App</h3>
+        <p>The goal of this application is to expose data about a set of people as FOAF profiles. These FOAF profiles should be both readable and writable.</p>
+        
+        <h2>How to publish domain entities as Linked Data</h2>
+        <p> These are the main steps:</p>
+        <ul>
+            <li>Implementing a resource handler to handle LDP requests. This provides the GET, OPTIONS, and HEAD functionalities.
+            
+            <pre class="prettyprint lang-java">
+@Resource(id = FOAFProfileHandler.ID)
+public class FOAFProfileHandler implements ResourceHandler {
+
+	public static final String ID = "FOAFProfileHandler";
+
+	public DataSet get(ResourceSnapshot resource) {
+        // Resource retrival logic
+	}
+}
+</pre>
+            </li>
+            <li> Making the resources modifiable by implementing the Modifiable interface
+             <pre class="prettyprint lang-java">
+@Resource(id = FOAFProfileHandler.ID)
+public class FOAFProfileHandler implements ResourceHandler, Modifiable {
+
+	public static final String ID = "FOAFProfileHandler";
+
+	public DataSet get(ResourceSnapshot resource) {
+        // Resource retrival logic goes here
+	}
+    
+    public void update(ResourceSnapshot resource, DataSet content, WriteSession session)
+			throws ContentProcessingException {
+        // Resource modification logic goes here
+    }
+}
+</pre>           
+            </li>
+            <li> Implementing the Application class and doing the initialization 
+            <pre class="prettyprint lang-java">   
+public class FOAFProfileApplication extends Application<Configuration> {
+
+	@Override
+	public void setup(Environment environment, Bootstrap<Configuration> bootstrap) {
+
+		bootstrap.addHandler(new FOAFProfileHandler());
+
+		//publishing initial resources
+		for (Person p : DummyDataStore.getPersonlist()) {
+			environment.publishResource(NamingScheme.getDefault().name(p.getId()), FOAFProfileHandler.class,
+					String.format("%s/", p.getId()));
+		}
+
+	}
+
+	@Override
+	public void initialize(WriteSession session) {
+		// any initialization logic
+
+	}
+
+	@Override
+	public void shutdown() {
+		// any shutdown logic
+	}
+
+}
+</pre>                 
+            </li>
+        <li> Add the 'ldp4jTargetApplication' context parameter to web.xml
+             <pre class="prettyprint lang-xml">   
+&lt;web-app
+	metadata-complete=&quot;false&quot;
+	version=&quot;3.0&quot;
+	xmlns=&quot;http://java.sun.com/xml/ns/javaee&quot;
+	xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;
+		http://java.sun.com/xml/ns/javaee 
+		http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;&gt;
+
+	&lt;display-name&gt;FOAF Profiles LDP4j Application&lt;/display-name&gt;
+	
+	&lt;context-param&gt;
+		&lt;param-name&gt;ldp4jTargetApplication&lt;/param-name&gt;
+		&lt;param-value&gt;org.ldp4j.examples.foaf.app.FOAFProfileApplication&lt;/param-value&gt;
+	&lt;/context-param&gt;
+
+&lt;/web-app&gt;
+</pre>        
+        </li>    
+        </ul>        
     </body>
 </html>
