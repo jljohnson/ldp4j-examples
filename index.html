@@ -27,7 +27,7 @@
         <h3>FOAF Profiles App</h3>
         <p>The goal of this application is to expose data about a set of people as FOAF profiles. These FOAF profiles should be both readable and writable.</p>
         
-        <h2>How to publish domain entities as Linked Data</h2>
+        <h2>Development</h2>
         <p> These are the main steps:</p>
         <ul>
             <li>Implementing a resource handler to handle LDP requests. This provides the GET, OPTIONS, and HEAD functionalities.
@@ -114,6 +114,62 @@ public class FOAFProfileApplication extends Application<Configuration> {
 &lt;/web-app&gt;
 </pre>        
         </li>    
-        </ul>        
+        </ul>  
+                
+        <h2>Deployment</h2> 
+        <p>The application can be built using maven and the resulting war file can be deployed in any servlet container.</p>
+        <p> Alternatively, you can use the jetty maven plugin to deploy it. </p>
+                
+        <pre class="prettyprint">
+ nandana@nandana-com:~/srcroot/github/ldp4j-examples/foaf$ mvn jetty:run
+ 
+ 
+[INFO] --- jetty-maven-plugin:9.2.3.v20140905:run (default-cli) @ ldp4j-foaf ---
+2014-11-08 02:04:09.617:INFO::main: Logging initialized @3578ms
+[INFO] Configuring Jetty for project: LDP4j :: Examples :: FOAF Profiles App
+[INFO] webAppSourceDirectory not set. Trying src/main/webapp
+[INFO] Reload Mechanic: automatic
+[INFO] Classes = /home/nandana/srcroot/github/ldp4j-examples/foaf/target/classes
+[INFO] Context path = /
+[INFO] Tmp directory = /home/nandana/srcroot/github/ldp4j-examples/foaf/target/tmp
+[INFO] Web defaults = org/eclipse/jetty/webapp/webdefault.xml
+[INFO] Web overrides =  none
+[INFO] web.xml file = file:/home/nandana/srcroot/github/ldp4j-examples/foaf/src/main/webapp/WEB-INF/web.xml
+[INFO] Webapp directory = /home/nandana/srcroot/github/ldp4j-examples/foaf/src/main/webapp
+2014-11-08 02:04:09.713:INFO:oejs.Server:main: jetty-9.2.3.v20140905
+0    [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - Starting container jetty/9.2.3.v20140905 3.0
+1    [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - * Context started:
+1    [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - - Name...........: FOAF Profiles LDP4j Application
+1    [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - - Public path....: 
+1    [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - - Deployment path: /home/nandana/srcroot/github/ldp4j-examples/foaf/src/main/webapp
+1    [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - - Applications...: [class org.ldp4j.examples.foaf.app.FOAFProfileApplication, class org.ldp4j.example.MyApplication]
+2014-11-08 02:04:11.993:INFO:/:main: Initializing Spring root WebApplicationContext
+243  [main] INFO  org.springframework.web.context.ContextLoader  - Root WebApplicationContext: initialization started
+269  [main] INFO  org.springframework.web.context.support.XmlWebApplicationContext  - Refreshing Root WebApplicationContext: startup date [Sat Nov 08 02:04:12 CET 2014]; root of context hierarchy
+303  [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader  - Loading XML bean definitions from class path resource [beans.xml]
+595  [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader  - Loading XML bean definitions from class path resource [META-INF/cxf/cxf.xml]
+632  [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader  - Loading XML bean definitions from class path resource [META-INF/cxf/cxf-servlet.xml]
+779  [main] INFO  org.springframework.beans.factory.support.DefaultListableBeanFactory  - Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@275cd942: defining beans [cxf,org.apache.cxf.bus.spring.BusWiringBeanFactoryPostProcessor,org.apache.cxf.bus.spring.Jsr250BeanPostProcessor,org.apache.cxf.bus.spring.BusExtensionPostProcessor,logInInterceptor,logOutInterceptor,frontend,api]; root of factory hierarchy
+849  [main] DEBUG org.ldp4j.application.engine.util.ListenerManager  - Registered 33A5D1EE (org.ldp4j.server.frontend.ServerFrontend$LocalApplicationEngineLifecycleListener)
+1041 [main] INFO  org.apache.cxf.endpoint.ServerImpl  - Setting the server's publish address to be /ldp4j
+1093 [main] INFO  org.springframework.web.context.ContextLoader  - Root WebApplicationContext: initialization completed in 850 ms
+1105 [main] DEBUG org.ldp4j.server.frontend.ServerFrontend  - LDP4j Application Engine state changed to 'AVAILABLE'
+1120 [main] DEBUG org.ldp4j.server.frontend.ServerFrontend  - LDP4j Application Engine state changed to 'STARTED'
+1126 [main] DEBUG org.ldp4j.application.engine.util.ListenerManager  - Registered 2DA40C90 (org.ldp4j.application.DefaultApplicationContext$LocalEndpointLifecycleListener)
+1171 [main] DEBUG org.ldp4j.application.lifecycle.EnvironmentImpl  - Published resource 'ResourceId{name=nandana, templateId=FOAFProfileHandler}' at 'nandana/'
+1171 [main] DEBUG org.ldp4j.application.lifecycle.EnvironmentImpl  - Published resource 'ResourceId{name=raul, templateId=FOAFProfileHandler}' at 'raul/'
+1171 [main] DEBUG org.ldp4j.application.lifecycle.EnvironmentImpl  - Published resource 'ResourceId{name=miguel, templateId=FOAFProfileHandler}' at 'miguel/'
+1172 [main] DEBUG org.ldp4j.application.session.WriteSessionService  - Created write session: WriteSessionConfiguration{path=null, targetSnapshot=null}
+1176 [main] INFO  org.ldp4j.examples.foaf.app.FOAFProfileApplication  - Initializing FOAF Profiles LDP4j application: org.ldp4j.application.session.DelegatedWriteSession@7cadd25d
+1176 [main] DEBUG org.ldp4j.application.session.WriteSessionService  - Force termination of active session...
+1176 [main] INFO  org.ldp4j.application.lifecycle.ApplicationLifecycleService  - Application 'FOAFProfileApplication' (org.ldp4j.examples.foaf.app.FOAFProfileApplication) initialized.
+1177 [main] INFO  org.ldp4j.server.setup.BootstrapContextListener  - LDP4j Application 'FOAFProfileApplication' (org.ldp4j.examples.foaf.app.FOAFProfileApplication) initialized.
+1177 [main] DEBUG org.ldp4j.server.setup.BootstrapContainerInitializer  - Context at '' initialized...
+2014-11-08 02:04:12.962:INFO:oejsh.ContextHandler:main: Started o.e.j.m.p.JettyWebAppContext@50ddca7a{/,file:/home/nandana/srcroot/github/ldp4j-examples/foaf/src/main/webapp/,AVAILABLE}{file:/home/nandana/srcroot/github/ldp4j-examples/foaf/src/main/webapp/}
+2014-11-08 02:04:12.963:WARN:oejsh.RequestLogHandler:main: !RequestLog
+2014-11-08 02:04:12.983:INFO:oejs.ServerConnector:main: Started ServerConnector@13ec8be7{HTTP/1.1}{0.0.0.0:8080}
+2014-11-08 02:04:12.983:INFO:oejs.Server:main: Started @6948ms
+[INFO] Started Jetty Server
+        </pre>                
     </body>
 </html>
