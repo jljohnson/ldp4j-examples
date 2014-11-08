@@ -1,7 +1,6 @@
 package org.ldp4j.examples.contactlist.app;
 
 import static org.ldp4j.application.data.IndividualReferenceBuilder.newReference;
-import static org.ldp4j.examples.contactlist.app.LDP4jUtils.uri;
 
 import java.net.URI;
 
@@ -14,8 +13,6 @@ import org.ldp4j.application.ext.annotations.BasicContainer;
 import org.ldp4j.application.session.ContainerSnapshot;
 import org.ldp4j.application.session.ResourceSnapshot;
 import org.ldp4j.application.session.WriteSession;
-import org.ldp4j.server.tckf.TCKFBasicContainerHandler;
-import org.ldp4j.server.tckf.TCKFResourceHandler;
 import org.nandana.examples.rdf.vocab.DCTerms;
 
 @BasicContainer(
