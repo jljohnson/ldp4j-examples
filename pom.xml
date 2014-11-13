@@ -18,7 +18,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>LDP4j::Examples</name>
+	<name>LDP4j :: Examples</name>
 	<description>A set of simple exaples built using LDP4j</description>
 	<url>http://ldp4j.org</url>
 

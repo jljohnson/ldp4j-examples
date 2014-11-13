@@ -1,4 +1,4 @@
-package org.nandana.examples.rdf.vocab;
+package org.ldp4j.examples.rdf.vocab;
 
 /**
  * String constants for the vocabulary defined in http://dublincore.org/usage/terms/

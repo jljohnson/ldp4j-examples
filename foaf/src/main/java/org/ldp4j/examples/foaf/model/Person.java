@@ -3,7 +3,9 @@ package org.ldp4j.examples.foaf.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Person {
+import org.ldp4j.examples.util.persistence.Entity;
+
+public class Person implements Entity{
 	
 	public Person (String id) {
 		this.id = id;
@@ -31,7 +33,7 @@ public class Person {
 	
 	private Set<String> emails;
 
-	public String getId() {
+	public String getID() {
 		return id;
 	}
 
@@ -69,5 +71,4 @@ public class Person {
 		} 
 		emails.add(email);
 	}
-	
 }

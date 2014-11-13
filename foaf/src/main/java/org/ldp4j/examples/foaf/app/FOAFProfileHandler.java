@@ -1,7 +1,8 @@
 package org.ldp4j.examples.foaf.app;
 
 import static org.ldp4j.application.data.IndividualReferenceBuilder.newReference;
-import static org.nandana.examples.util.Utils.uri;
+import static org.ldp4j.examples.foaf.app.FOAFProfileApplication.getDataStore;
+import static org.ldp4j.examples.util.Utils.uri;
 
 import java.net.URI;
 
@@ -15,6 +16,7 @@ import org.ldp4j.application.data.ManagedIndividualId;
 import org.ldp4j.application.data.Name;
 import org.ldp4j.application.data.NamingScheme;
 import org.ldp4j.application.data.Property;
+import org.ldp4j.application.data.RelativeIndividualId;
 import org.ldp4j.application.data.Value;
 import org.ldp4j.application.data.ValueVisitor;
 import org.ldp4j.application.domain.RDF;
@@ -27,9 +29,8 @@ import org.ldp4j.application.session.WriteSession;
 import org.ldp4j.application.session.WriteSessionException;
 import org.ldp4j.examples.foaf.model.DataValidationException;
 import org.ldp4j.examples.foaf.model.Person;
-import org.ldp4j.examples.foaf.persistence.DummyDataStore;
-import org.nandana.examples.rdf.vocab.DCTerms;
-import org.nandana.examples.rdf.vocab.FOAF;
+import org.ldp4j.examples.rdf.vocab.DCTerms;
+import org.ldp4j.examples.rdf.vocab.FOAF;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
@@ -42,7 +43,7 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 	public DataSet get(ResourceSnapshot resource) {
 
 		Name<String> name = (Name<String>) resource.name();
-		Person person = DummyDataStore.getPerson(name.id());
+		Person person = getDataStore().getEntity(name.id());
 
 		if (person == null) {
 			new IllegalStateException(String.format("Person '%s' is not in the database.", name.id()));
@@ -57,7 +58,7 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 		Name<String> name = (Name<String>) resource.name();
 
 		// Get the existing person data
-		Person person = DummyDataStore.getPerson(name.id());
+		Person person = getDataStore().getEntity(name.id());
 		// We must have an existing data, if not something is wrong
 		Preconditions.checkNotNull(person, "Person '%s' does not have an existing record.", name.id());
 
@@ -65,12 +66,12 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 		Person personNew = convertToPersonObject(content, name);
 
 		try {
-			DummyDataStore.addPerson(personNew);
+			getDataStore().addEntity(personNew);
 			session.modify(resource);
 			session.saveChanges();
 		} catch (WriteSessionException e) {
 			// Restore data if update fails
-			DummyDataStore.addPerson(person);
+			getDataStore().addEntity(person);
 			throw new IllegalStateException("Update failed", e);
 		}
 
@@ -87,7 +88,7 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 	private DataSet covertToFOAFProfile(Person person) {
 
 		// Using the DSL
-		DataSet dataSet = DataDSL.dataSet().individual(newReference().toManagedIndividual(ID).named(person.getId()))
+		DataSet dataSet = DataDSL.dataSet().individual(newReference().toManagedIndividual(ID).named(person.getID()))
 				.hasLink(RDF.TYPE.qualifiedEntityName())
 				.referringTo(newReference().toExternalIndividual().atLocation(uri(FOAF.PersonalProfileDocument)))
 				.hasProperty(DCTerms.title).withValue(String.format("%1$s's  FOAF file", person.getFirstName()))
@@ -95,7 +96,7 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 
 		// Using the DataSet API
 
-		Name<String> personName = NamingScheme.getDefault().name(person.getId());
+		Name<String> personName = NamingScheme.getDefault().name(person.getID());
 		ManagedIndividualId personId = ManagedIndividualId.createId(personName, ID);
 
 		// Create the individual to real world object - person#me
@@ -131,8 +132,8 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 		Individual<ManagedIndividualId, ?> personIndividual = dataSet.individualOfId(personId);
 		Preconditions.checkNotNull(personIndividual, "person individual");
 		
-		ManagedIndividualId relativeId = ManagedIndividualId.createId(URI.create("#me"), personId);
-		Individual<ManagedIndividualId, ?> relativeIndividual = dataSet.individualOfId(relativeId);
+		RelativeIndividualId relativeId = RelativeIndividualId.createId(personId, URI.create("#me"));
+		Individual<RelativeIndividualId, ?> relativeIndividual = dataSet.individualOfId(relativeId);
 		Preconditions.checkNotNull(relativeIndividual, "relative individual");
 
 		final Person person = new Person(personName.id());
@@ -157,7 +158,7 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 		
 		Property surname = relativeIndividual.property(uri(FOAF.surname));
 		if (surname.numberOfValues() == 1) {
-			Value firstValue = Iterables.getFirst(firstName,null);
+			Value firstValue = Iterables.getFirst(surname,null);
 			firstValue.accept(
 					new ValueVisitor() {
 					public void visitLiteral(Literal<?> value) {

@@ -1,4 +1,4 @@
-package org.nandana.examples.util;
+package org.ldp4j.examples.util;
 
 import java.net.URI;
 

@@ -22,15 +22,10 @@
 		http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<display-name>Contact List LDP4j Application</display-name>
-
-<!-- 	<context-param>
-		<param-name>ldp4jTargetApplication</param-name>
-		<param-value>org.ldp4j.server.tckf.TCKFApplication</param-value>
-	</context-param> -->
 	
 	<context-param>
 		<param-name>ldp4jTargetApplication</param-name>
-		<param-value>org.nandana.examples.ldp4j.contactlist.app.ContactListApplication</param-value>
+		<param-value>org.ldp4j.examples.contactlist.app.ContactListApplication</param-value>
 	</context-param>
 
 </web-app>
