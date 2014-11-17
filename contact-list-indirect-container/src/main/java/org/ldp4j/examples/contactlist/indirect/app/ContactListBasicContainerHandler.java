@@ -66,15 +66,12 @@ public class ContactListBasicContainerHandler implements ContainerHandler {
 		NewIndividual newInd=dataSet.individual(DataSetHelper.SELF,NewIndividual.class);
 		Individual<URI, ?> self = dataSet.individualOfId(DataSetHelper.SELF);
 		
-		
-		
-		
 		DataSetHelper helper = DataSetHelper.newInstance(dataSet);
 
 		try {
 			ManagedIndividual newManInd = helper.manage(ManagedIndividualId.createId(name, ID));
 		} catch (DataSetModificationException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 		

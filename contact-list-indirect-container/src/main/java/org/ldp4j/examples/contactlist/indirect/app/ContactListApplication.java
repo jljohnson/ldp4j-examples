@@ -1,15 +1,10 @@
 package org.ldp4j.examples.contactlist.indirect.app;
 
-import java.net.URI;
-
 import org.ldp4j.application.data.Name;
 import org.ldp4j.application.data.NamingScheme;
 import org.ldp4j.application.ext.Application;
 import org.ldp4j.application.ext.Configuration;
-import org.ldp4j.application.session.ContainerSnapshot;
-import org.ldp4j.application.session.ResourceSnapshot;
 import org.ldp4j.application.session.WriteSession;
-import org.ldp4j.application.session.WriteSessionException;
 import org.ldp4j.application.setup.Bootstrap;
 import org.ldp4j.application.setup.Environment;
 import org.ldp4j.examples.contactlist.model.Contact;
@@ -25,7 +20,7 @@ public class ContactListApplication extends Application<Configuration>  {
 	
 	private static final String CONTAINER_NAME   = "basicContainer";
 	
-	public static final String CONTAINER_PATH    = "contact_list_basic/";
+	public static final String CONTAINER_PATH    = "contact-list/";
 	
 	private final Name<String> containerName = NamingScheme.getDefault().name(CONTAINER_NAME);
 
@@ -52,22 +47,7 @@ public class ContactListApplication extends Application<Configuration>  {
 	@Override
 	public void initialize(WriteSession session) {
 		LOGGER.info("Initializing application: {}",session);
-		
-/*		try {
-			ContainerSnapshot container = session.find(ContainerSnapshot.class, this.containerName, ContactListBasicContainerHandler.class);
-			container.addMember(NamingScheme.getDefault().name(1));
-			container.addMember(NamingScheme.getDefault().name(2));
-			container.addMember(NamingScheme.getDefault().name(3));
-			ResourceSnapshot resource = session.find(ResourceSnapshot.class,NamingScheme.getDefault().name(4),ContactResourceHandler.class);
-			if(resource!=null) {
-				session.delete(resource);
-			}
-			session.saveChanges();
-		} catch (WriteSessionException e) {
-			throw new 
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+
 		
 	}
 

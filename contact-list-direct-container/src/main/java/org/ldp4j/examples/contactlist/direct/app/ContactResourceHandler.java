@@ -14,7 +14,6 @@ import org.ldp4j.application.data.Property;
 import org.ldp4j.application.data.Value;
 import org.ldp4j.application.data.ValueVisitor;
 import org.ldp4j.application.domain.RDF;
-import org.ldp4j.application.ext.ContentProcessingException;
 import org.ldp4j.application.ext.Deletable;
 import org.ldp4j.application.ext.Modifiable;
 import org.ldp4j.application.ext.ResourceHandler;
@@ -72,8 +71,7 @@ public class ContactResourceHandler implements ResourceHandler, Modifiable, Dele
 		
 	}
 
-	public void update(ResourceSnapshot resource, DataSet content,
-			WriteSession session) throws ContentProcessingException {
+	public void update(ResourceSnapshot resource, DataSet content, WriteSession session)  {
 
 		
 	}

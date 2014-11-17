@@ -20,7 +20,6 @@ import org.ldp4j.application.data.RelativeIndividualId;
 import org.ldp4j.application.data.Value;
 import org.ldp4j.application.data.ValueVisitor;
 import org.ldp4j.application.domain.RDF;
-import org.ldp4j.application.ext.ContentProcessingException;
 import org.ldp4j.application.ext.Modifiable;
 import org.ldp4j.application.ext.ResourceHandler;
 import org.ldp4j.application.ext.annotations.Resource;
@@ -52,8 +51,7 @@ public class FOAFProfileHandler implements ResourceHandler, Modifiable {
 		return covertToFOAFProfile(person);
 	}
 
-	public void update(ResourceSnapshot resource, DataSet content, WriteSession session)
-			throws ContentProcessingException {
+	public void update(ResourceSnapshot resource, DataSet content, WriteSession session) {
 
 		Name<String> name = (Name<String>) resource.name();
 
