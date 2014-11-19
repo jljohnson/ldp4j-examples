@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+     <groupId>org.ldp4j.examples</groupId>
+     <artifactId>examples-parent</artifactId>
+     <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+    </parent>
+
+	<artifactId>ldp4j-foaf</artifactId>
+	<packaging>war</packaging>
+
+	<name>LDP4j :: Examples :: FOAF Profiles LDP App</name>
+	<description>An example FOAF profiles application built using LDP4j</description>
+    
+	<dependencies>
+		<dependency>
+			<groupId>org.ldp4j.framework</groupId>
+			<artifactId>ldp4j-server-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>geronimo-servlet_3.0_spec</artifactId>
+					<groupId>org.apache.geronimo.specs</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-security</artifactId>
+					<groupId>org.eclipse.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-http</artifactId>
+					<groupId>org.eclipse.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-server</artifactId>
+					<groupId>org.eclipse.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-util</artifactId>
+					<groupId>org.eclipse.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-io</artifactId>
+					<groupId>org.eclipse.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-continuation</artifactId>
+					<groupId>org.eclipse.jetty</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.ldp4j.framework</groupId>
+			<artifactId>ldp4j-application-examples</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ldp4j.examples</groupId>
+     		<artifactId>ldp4j-examples-utils</artifactId>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+        	<groupId>com.google.guava</groupId>
+        	<artifactId>guava</artifactId>
+      	</dependency>
+      	
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
