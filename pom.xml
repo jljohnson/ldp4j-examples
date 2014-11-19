@@ -73,7 +73,7 @@
           <name>Sonatype OSSRH (OSS Repository Hosting) repository</name>
           <snapshots>
             <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
+            <updatePolicy>interval:300</updatePolicy>
             <checksumPolicy>warn</checksumPolicy>
           </snapshots>
           <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -95,11 +95,10 @@
 
 	<modules>
 		<module>example-utils</module>
-		<module>foaf-resources</module>
-		<module>contact-list-basic-container</module>
-        <module>contact-list-direct-container</module>
-        <module>contact-list-indirect-container</module>
-        <module>ldp-clients</module>
+		<module>foaf-app</module>
+		<module>contact-list-app</module>
+        <module>example-clients</module>
+        <module>integration-tests</module>
 	</modules>
 
 </project>
