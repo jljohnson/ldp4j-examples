@@ -82,4 +82,38 @@ public class FOAFResourcesTest {
 		
 	}
 
+	@Test
+	public void testFOAFProfilePut(@ArquillianResource URL contextURL) throws Exception {
+
+		String resourceURI = contextURL + "ldp4j/api/nandana/";
+
+		LOGGER.debug("Context URL : {}", contextURL.toString());
+		LOGGER.debug("Resource URL : {}", resourceURI);
+
+		HttpClient client = new DefaultHttpClient();
+		HttpGet get = new HttpGet(resourceURI);
+		get.setHeader("Accept", "text/turtle");
+
+		HttpResponse response = client.execute(get);
+
+		assertThat("successful retrieval",response.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
+
+		HttpEntity entity = response.getEntity();
+
+		assertThat("body shouldn't be empty", entity, is(notNullValue()));
+
+		Model model = ModelFactory.createDefaultModel();
+		model.read(entity.getContent(), null, "TURTLE");
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		model.write(baos, "TURTLE");
+		String content = baos.toString();
+		LOGGER.debug("Resource Content : {} \n", content);
+
+		client.getConnectionManager().shutdown();
+
+		//TODO test the update
+
+	}
+
 }

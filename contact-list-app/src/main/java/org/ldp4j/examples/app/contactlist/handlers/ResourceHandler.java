@@ -4,15 +4,7 @@ import static org.ldp4j.application.data.IndividualReferenceBuilder.newReference
 import static org.ldp4j.examples.app.contactlist.ContactListApplication.getDataStore;
 import static org.ldp4j.examples.util.Utils.uri;
 
-import org.ldp4j.application.data.DataDSL;
-import org.ldp4j.application.data.DataSet;
-import org.ldp4j.application.data.Individual;
-import org.ldp4j.application.data.Literal;
-import org.ldp4j.application.data.ManagedIndividual;
-import org.ldp4j.application.data.Name;
-import org.ldp4j.application.data.Property;
-import org.ldp4j.application.data.Value;
-import org.ldp4j.application.data.ValueVisitor;
+import org.ldp4j.application.data.*;
 import org.ldp4j.application.domain.RDF;
 import org.ldp4j.application.ext.Deletable;
 import org.ldp4j.application.ext.Modifiable;
@@ -28,6 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
+
+import java.net.URI;
 
 @Resource(
 		id=ResourceHandler.ID
@@ -72,7 +66,25 @@ public class ResourceHandler implements org.ldp4j.application.ext.ResourceHandle
 
 	public void update(ResourceSnapshot resource, DataSet content, WriteSession session) {
 
-		
+		LOGGER.trace("Updating the resource {}",resource.name().id());
+
+		Contact oldContact = getDataStore().getEntity(((Name<String>) resource.name()).id());
+
+		ManagedIndividualId id = ManagedIndividualId.createId(resource.name(), ResourceHandler.ID);
+		ManagedIndividual contactIndividual = content.individual(id, ManagedIndividual.class);
+
+		Contact contact = transform(contactIndividual, resource.name().id().toString());
+
+		try {
+			getDataStore().addEntity(contact);
+			session.modify(resource);
+			session.saveChanges();
+		} catch (WriteSessionException e) {
+			// Recover if failed
+			getDataStore().addEntity(oldContact);
+			throw new IllegalStateException("Deletion failed",e);
+		}
+
 	}
 	
 	/***
@@ -88,7 +100,8 @@ public class ResourceHandler implements org.ldp4j.application.ext.ResourceHandle
 	 *   vcard:hasTelephone [ a vcard:Home, vcard:Voice;
 	 *   vcard:hasValue <tel:+34655555555> ] . 
 	 * </pre> 
-	 * @param dataset
+	 * @param individual
+	 * @param id
 	 * @return
 	 */
 	public static Contact transform (ManagedIndividual individual, String id) {
@@ -177,7 +190,12 @@ public class ResourceHandler implements org.ldp4j.application.ext.ResourceHandle
 		
 		return contact;
 	}
-	
+
+	/***
+	 * Transform the contact object into a LDP4j dataset
+	 * @param contact
+	 * @return
+	 */
 	public static DataSet transform (Contact contact) {
 		
 		// Using the DSL
